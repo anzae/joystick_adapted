@@ -173,18 +173,12 @@ public:
 		uint8_t hidReportId = JOYSTICK_DEFAULT_REPORT_ID,
 		uint8_t joystickType = JOYSTICK_TYPE_JOYSTICK,
         uint8_t buttonCount = JOYSTICK_DEFAULT_BUTTON_COUNT,
-		uint8_t hatSwitchCount = JOYSTICK_DEFAULT_HATSWITCH_COUNT,
 		bool includeXAxis = true,
 		bool includeYAxis = true,
 		bool includeZAxis = true,
 		bool includeRxAxis = true,
 		bool includeRyAxis = true,
-		bool includeRzAxis = true,
-		bool includeRudder = true,
-		bool includeThrottle = true,
-		bool includeAccelerator = true,
-		bool includeBrake = true,
-		bool includeSteering = true);
+		bool includeRzAxis = true);
 
 	void begin(bool initAutoSendState = true);
 	void end();
@@ -220,31 +214,6 @@ public:
 		_rzAxisMinimum = minimum;
 		_rzAxisMaximum = maximum;
 	}
-	inline void setRudderRange(int16_t minimum, int16_t maximum)
-	{
-		_rudderMinimum = minimum;
-		_rudderMaximum = maximum;
-	}
-	inline void setThrottleRange(int16_t minimum, int16_t maximum)
-	{
-		_throttleMinimum = minimum;
-		_throttleMaximum = maximum;
-	}
-	inline void setAcceleratorRange(int16_t minimum, int16_t maximum)
-	{
-		_acceleratorMinimum = minimum;
-		_acceleratorMaximum = maximum;
-	}
-	inline void setBrakeRange(int16_t minimum, int16_t maximum)
-	{
-		_brakeMinimum = minimum;
-		_brakeMaximum = maximum;
-	}
-	inline void setSteeringRange(int16_t minimum, int16_t maximum)
-	{
-		_steeringMinimum = minimum;
-		_steeringMaximum = maximum;
-	}
 
 	// Set Axis Values
 	void setXAxis(int16_t value);
@@ -254,22 +223,14 @@ public:
 	void setRyAxis(int16_t value);
 	void setRzAxis(int16_t value);
 
-	// Set Simuation Values
-	void setRudder(int16_t value);
-	void setThrottle(int16_t value);
-	void setAccelerator(int16_t value);
-	void setBrake(int16_t value);
-	void setSteering(int16_t value);
-
 	void setButton(uint8_t button, uint8_t value);
 	void pressButton(uint8_t button);
 	void releaseButton(uint8_t button);
-	void setHatSwitch(int8_t hatSwitch, int16_t value);
 
 	void sendState();
 
 	//force feedback Interfaces
-	void getForce(int32_t* forces);
+	void getForce(int8_t* forces);
 	//set gain functions
 	int8_t setGains(Gains* _gains){
 	    if(_gains != nullptr){

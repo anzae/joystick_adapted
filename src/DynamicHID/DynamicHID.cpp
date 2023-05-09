@@ -116,15 +116,23 @@ int DynamicHID_::RecvData(byte* data)
 	return count;
 }
 
-void DynamicHID_::RecvfromUsb() 
+bool DynamicHID_::RecvfromUsb(uint8_t *buf) 
 {
 	if (usb_Available() > 0) {
 		uint8_t out_ffbdata[64];
 		uint16_t len = USB_Recv(PID_ENDPOINT_OUT, &out_ffbdata, 64);
 		if (len >= 0) {
-			pidReportHandler.UppackUsbData(out_ffbdata, len);
+			//pidReportHandler.UppackUsbData(out_ffbdata, len);
+
+			for (int i=0; i<len; i++) {
+				buf[i] = out_ffbdata[i];
+			}
+
+			return true;
+
 		}
 	}
+	return false;
 }
 
 bool DynamicHID_::GetReport(USBSetup& setup) {
