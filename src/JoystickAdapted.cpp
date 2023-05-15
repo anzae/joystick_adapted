@@ -57,7 +57,6 @@ Joystick_::Joystick_(
 
     // Save Joystick Settings
     _buttonCount = buttonCount;
-	_hatSwitchCount = 0;
 	_includeAxisFlags = 0;
 	_includeAxisFlags |= (includeXAxis ? JOYSTICK_INCLUDE_X_AXIS : 0);
 	_includeAxisFlags |= (includeYAxis ? JOYSTICK_INCLUDE_Y_AXIS : 0);
@@ -280,15 +279,6 @@ Joystick_::Joystick_(
 	_xAxisRotation = 0;
 	_yAxisRotation = 0;
 	_zAxisRotation = 0;
-	_throttle = 0;
-	_rudder = 0;
-	_accelerator = 0;
-	_brake = 0;
-	_steering = 0;
-	for (int index = 0; index < JOYSTICK_HATSWITCH_COUNT_MAXIMUM; index++)
-	{
-		_hatSwitchValues[index] = JOYSTICK_HATSWITCH_RELEASE;
-	}
     for (int index = 0; index < _buttonValuesArraySize; index++)
     {
         _buttonValues[index] = 0;
@@ -301,21 +291,16 @@ void Joystick_::begin(bool initAutoSendState)
 	sendState();
 }
 
-void Joystick_::getForce(int8_t* forces) {
-	uint8_t buf[18];
+bool Joystick_::getForce(int8_t* forces, int len) {
+	uint8_t buf[64] = {0};
 	if (DynamicHID().RecvfromUsb(buf)) {
-		for (int i=0;i<18;i++){
-			buf[i] = forces[i];
+		for (int i=0;i<len;i++){
+			forces[i] = buf[i];
 		}
+		return true;
 	}
+	return false;
 
-
-	return 0;
-	//forceCalculator(forces);
-}
-
-float Joystick_::NormalizeRange(int32_t x, int32_t maxValue) {
-	return (float)x * 1.00 / maxValue;
 }
 
 void Joystick_::end()
@@ -424,11 +409,6 @@ int Joystick_::buildAndSetAxisValue(bool includeAxis, int16_t axisValue, int16_t
 	return buildAndSet16BitValue(includeAxis, axisValue, axisMinimum, axisMaximum, JOYSTICK_AXIS_MINIMUM, JOYSTICK_AXIS_MAXIMUM, dataLocation);
 }
 
-int Joystick_::buildAndSetSimulationValue(bool includeValue, int16_t value, int16_t valueMinimum, int16_t valueMaximum, uint8_t dataLocation[]) 
-{
-	return buildAndSet16BitValue(includeValue, value, valueMinimum, valueMaximum, JOYSTICK_SIMULATOR_MINIMUM, JOYSTICK_SIMULATOR_MAXIMUM, dataLocation);
-}
-
 void Joystick_::sendState()
 {
 	uint8_t data[_hidReportSize];
@@ -439,8 +419,6 @@ void Joystick_::sendState()
 	{
 		data[index] = _buttonValues[index];		
 	}
-
-	// Set Hat Switch Values
 
 	// Set Axis Values
 	index += buildAndSetAxisValue(_includeAxisFlags & JOYSTICK_INCLUDE_X_AXIS, _xAxis, _xAxisMinimum, _xAxisMaximum, &(data[index]));
