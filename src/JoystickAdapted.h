@@ -166,7 +166,7 @@ public:
 	void sendState();
 
 	//force feedback Interfaces
-	bool getForce(int8_t* forces, int len);
+	bool getForce(uint8_t* forces, uint8_t len);
 
 };
 

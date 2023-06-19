@@ -291,7 +291,7 @@ void Joystick_::begin(bool initAutoSendState)
 	sendState();
 }
 
-bool Joystick_::getForce(int8_t* forces, int len) {
+bool Joystick_::getForce(uint8_t* forces, uint8_t len) {
 	uint8_t buf[64] = {0};
 	if (DynamicHID().RecvfromUsb(buf)) {
 		for (int i=0;i<len;i++){
