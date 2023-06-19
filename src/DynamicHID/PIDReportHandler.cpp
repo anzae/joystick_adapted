@@ -163,12 +163,12 @@ void PIDReportHandler::SetEffect(USB_FFBReport_SetEffect_Output_Data_t* data)
 {
 	volatile TEffectState* effect = &g_EffectStates[data->effectBlockIndex];
 
-	effect->duration = data->duration;
-	effect->directionX = data->directionX;
-	effect->directionY = data->directionY;
+	//effect->duration = data->duration;
+	//effect->directionX = data->directionX;
+	//effect->directionY = data->directionY;
 	effect->effectType = data->effectType;
 	effect->gain = data->gain;
-	effect->enableAxis = data->enableAxis;
+	//effect->enableAxis = data->enableAxis;
 }
 
 void PIDReportHandler::SetEnvelope(USB_FFBReport_SetEnvelope_Output_Data_t* data, volatile TEffectState* effect)
@@ -232,72 +232,73 @@ void PIDReportHandler::CreateNewEffect(USB_FFBReport_CreateNewEffect_Feature_Dat
 	}
 }
 
-void PIDReportHandler::UppackUsbData(uint8_t* data, uint16_t len)
+uint8_t PIDReportHandler::UppackUsbData(uint8_t* data, uint16_t len)
 {
 	//Serial.print("len:");
 	//Serial.println(len);
 	uint8_t effectId = data[1]; // effectBlockIndex is always the second byte.
 	//Serial.println("eid:");
 	//Serial.println(effectId);
-	switch (data[0])    // reportID
-	{
-	case 1:
-		//Serial.println("SetEffect");
-		SetEffect((USB_FFBReport_SetEffect_Output_Data_t*)data);
-		break;
-	case 2:
-		//Serial.println("SetEnvelop");
-		SetEnvelope((USB_FFBReport_SetEnvelope_Output_Data_t*)data, &g_EffectStates[effectId]);
-		break;
-	case 3:
-		//Serial.println("SetCondition");
-		SetCondition((USB_FFBReport_SetCondition_Output_Data_t*)data, &g_EffectStates[effectId]);
-		break;
-	case 4:
-		//Serial.println("SetPeriodic");
-		SetPeriodic((USB_FFBReport_SetPeriodic_Output_Data_t*)data, &g_EffectStates[effectId]);
-		break;
-	case 5:
-		//Serial.println("SetConstantForce");
-		SetConstantForce((USB_FFBReport_SetConstantForce_Output_Data_t*)data, &g_EffectStates[effectId]);
-		break;
-	case 6:
-		//Serial.println("SetRampForce");
-		SetRampForce((USB_FFBReport_SetRampForce_Output_Data_t*)data, &g_EffectStates[effectId]);
-		break;
-	case 7:
-		//Serial.println("SetCustomForceData");
-		SetCustomForceData((USB_FFBReport_SetCustomForceData_Output_Data_t*)data);
-		break;
-	case 8:
-		//Serial.println("SetDownloadForceSample");
-		SetDownloadForceSample((USB_FFBReport_SetDownloadForceSample_Output_Data_t*)data);
-		break;
-	case 9:
-		break;
-	case 10:
-		//Serial.println("EffectOperation");
-		EffectOperation((USB_FFBReport_EffectOperation_Output_Data_t*)data);
-		break;
-	case 11:
-		//Serial.println("BlockFree");
-		BlockFree((USB_FFBReport_BlockFree_Output_Data_t*)data);
-		break;
-	case 12:
-		//Serial.println("DeviceControl");
-		DeviceControl((USB_FFBReport_DeviceControl_Output_Data_t*)data);
-		break;
-	case 13:
-		//Serial.println("DeviceGain");
-		DeviceGain((USB_FFBReport_DeviceGain_Output_Data_t*)data);
-		break;
-	case 14:
-		//Serial.println("SetCustomForce");
-		SetCustomForce((USB_FFBReport_SetCustomForce_Output_Data_t*)data);
-		break;
-	default:
-		break;
-	}
+	return data;
+	// switch (data[0])    // reportID
+	// {
+	// case 1:
+	// 	//Serial.println("SetEffect");
+	// 	SetEffect((USB_FFBReport_SetEffect_Output_Data_t*)data);
+	// 	break;
+	// case 2:
+	// 	//Serial.println("SetEnvelop");
+	// 	SetEnvelope((USB_FFBReport_SetEnvelope_Output_Data_t*)data, &g_EffectStates[effectId]);
+	// 	break;
+	// case 3:
+	// 	//Serial.println("SetCondition");
+	// 	SetCondition((USB_FFBReport_SetCondition_Output_Data_t*)data, &g_EffectStates[effectId]);
+	// 	break;
+	// case 4:
+	// 	//Serial.println("SetPeriodic");
+	// 	SetPeriodic((USB_FFBReport_SetPeriodic_Output_Data_t*)data, &g_EffectStates[effectId]);
+	// 	break;
+	// case 5:
+	// 	//Serial.println("SetConstantForce");
+	// 	SetConstantForce((USB_FFBReport_SetConstantForce_Output_Data_t*)data, &g_EffectStates[effectId]);
+	// 	break;
+	// case 6:
+	// 	//Serial.println("SetRampForce");
+	// 	SetRampForce((USB_FFBReport_SetRampForce_Output_Data_t*)data, &g_EffectStates[effectId]);
+	// 	break;
+	// case 7:
+	// 	//Serial.println("SetCustomForceData");
+	// 	SetCustomForceData((USB_FFBReport_SetCustomForceData_Output_Data_t*)data);
+	// 	break;
+	// case 8:
+	// 	//Serial.println("SetDownloadForceSample");
+	// 	SetDownloadForceSample((USB_FFBReport_SetDownloadForceSample_Output_Data_t*)data);
+	// 	break;
+	// case 9:
+	// 	break;
+	// case 10:
+	// 	//Serial.println("EffectOperation");
+	// 	EffectOperation((USB_FFBReport_EffectOperation_Output_Data_t*)data);
+	// 	break;
+	// case 11:
+	// 	//Serial.println("BlockFree");
+	// 	BlockFree((USB_FFBReport_BlockFree_Output_Data_t*)data);
+	// 	break;
+	// case 12:
+	// 	//Serial.println("DeviceControl");
+	// 	DeviceControl((USB_FFBReport_DeviceControl_Output_Data_t*)data);
+	// 	break;
+	// case 13:
+	// 	//Serial.println("DeviceGain");
+	// 	DeviceGain((USB_FFBReport_DeviceGain_Output_Data_t*)data);
+	// 	break;
+	// case 14:
+	// 	//Serial.println("SetCustomForce");
+	// 	SetCustomForce((USB_FFBReport_SetCustomForce_Output_Data_t*)data);
+	// 	break;
+	// default:
+	// 	break;
+	// }
 }
 
 uint8_t* PIDReportHandler::getPIDPool()

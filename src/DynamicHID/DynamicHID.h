@@ -121,7 +121,7 @@ public:
   bool usb_Available();
   int SendReport(uint8_t id, const void* data, int len);
   int RecvData(byte* data);
-  void RecvfromUsb();
+  bool RecvfromUsb(uint8_t* buf);
   void AppendDescriptor(DynamicHIDSubDescriptor* node);
   PIDReportHandler pidReportHandler;
 
